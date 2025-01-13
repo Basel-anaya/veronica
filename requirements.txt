@@ -1,0 +1,29 @@
+# Core dependencies
+numpy
+opencv-python
+dlib
+mediapipe
+insightface
+fastapi
+uvicorn
+python-dotenv
+pyodbc
+scipy
+Pillow
+aiofiles
+jinja2
+
+# GUI dependencies
+tk
+
+# CUDA support (optional but recommended)
+torch
+torchvision
+
+# Web dependencies
+python-multipart
+starlette
+
+# Development dependencies
+python-jose
+passlib

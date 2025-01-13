@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Face Authentication</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Face Authentication System">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}?v=1.1">
+    <!-- CSP Header for security -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   img-src 'self' data: blob: https://fonts.gstatic.com; 
+                   media-src 'self' blob:;
+                   style-src 'self' https://fonts.googleapis.com 'unsafe-inline';
+                   font-src https://fonts.gstatic.com;
+                   script-src 'self';">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Face Authentication System</h1>
+            <p class="subtitle">Secure and reliable face recognition</p>
+        </header>
+        
+        <main class="container">
+            <div class="card video-container">
+                <div class="card-header">
+                    <h2>Live Camera Feed</h2>
+                    <div class="button-group">
+                        <button id="startBtn" class="primary-button">
+                            <span class="button-text">Start Camera</span>
+                            <div class="loading-spinner"></div>
+                        </button>
+                    </div>
+                </div>
+                <div class="video-wrapper">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                    <div class="video-overlay">
+                        <div class="face-guide">
+                            <div class="face-guide-animation"></div>
+                        </div>
+                        <div class="camera-status">
+                            <div class="camera-status-icon"></div>
+                            <span class="camera-status-text">Position your face within the circle</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card status-container">
+                <div class="card-header">
+                    <h2>Authentication Status</h2>
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span class="status-text">Initializing...</span>
+                    </div>
+                </div>
+                <div id="status" class="status">
+                    <div class="status-message">Checking camera availability...</div>
+                    <div class="status-details"></div>
+                </div>
+                <div class="divider"></div>
+                <div class="processed-image-wrapper">
+                    <div id="processedImageContainer" class="processed-image">
+                        <div class="image-placeholder">
+                            <div class="placeholder-icon"></div>
+                            <p>Processed image will appear here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card register-container">
+                <div class="card-header">
+                    <h2>Register New Person</h2>
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span class="status-text">Ready</span>
+                    </div>
+                </div>
+                <form class="register-form" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="personName">Person's Name</label>
+                        <input type="text" id="personName" placeholder="Enter full name" class="text-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="idCard">ID Card Photo</label>
+                        <div class="file-upload">
+                            <input type="file" id="idCard" name="id_card" accept="image/*" class="file-input">
+                            <div class="upload-placeholder">
+                                <div class="upload-icon"></div>
+                                <p>Click to upload ID card or drag and drop</p>
+                                <span class="file-info">JPG, PNG or JPEG (max. 5MB)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="preview-container">
+                        <img id="idPreview" class="id-preview" style="display: none;">
+                        <div class="preview-placeholder">
+                            <div class="preview-icon"></div>
+                            <p>ID preview will appear here</p>
+                        </div>
+                    </div>
+                    <button type="button" id="registerBtn" class="primary-button register-button" disabled>
+                        <span class="button-text">Register Person</span>
+                        <div class="loading-spinner"></div>
+                    </button>
+                </form>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <p>© 2024 Face Authentication System</p>
+        </footer>
+    </div>
+    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+</body>
+</html>
+    
