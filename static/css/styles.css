@@ -1,0 +1,532 @@
+/* Modern UI styles for face authentication */
+:root {
+    /* Colors */
+    --primary-color: #2196F3;
+    --success-color: #4CAF50;
+    --error-color: #f44336;
+    --warning-color: #ff9800;
+    --text-color: #ffffff;
+    --overlay-color: rgba(0, 0, 0, 0.6);
+    
+    /* Dimensions */
+    --oval-width: min(65vw, 300px);
+    --oval-height: min(70vh, 380px);
+    --oval-border-width: 3px;
+    
+    /* Effects */
+    --oval-glow: 0 0 20px rgba(33, 150, 243, 0.5);
+    --shadow-normal: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-strong: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#video-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#video {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Oval guide styles */
+.oval-border {
+    position: absolute;
+    width: var(--oval-width);
+    height: var(--oval-height);
+    border: var(--oval-border-width) solid var(--primary-color);
+    border-radius: 50%/60%;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--oval-glow);
+    will-change: transform, border-color;
+}
+
+.oval-border::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+/* Status display styles */
+#status-container {
+    position: fixed;
+    bottom: max(10vh, 80px);
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    z-index: 10;
+    width: min(90%, 400px);
+}
+
+#status {
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    margin-bottom: 0.5rem;
+    padding: 16px 32px;
+    border-radius: 20px;
+    background: rgba(28, 28, 30, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-strong);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#status.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#statusHint {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+    margin-top: 8px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* State-specific styles */
+.oval-border.no-face {
+    border-color: var(--primary-color);
+    animation: pulse 2s infinite;
+}
+
+.oval-border.detected {
+    border-color: var(--warning-color);
+    box-shadow: 0 0 20px rgba(255, 152, 0, 0.5);
+}
+
+.oval-border.analyzing {
+    border-color: var(--primary-color);
+    animation: scanning 2s infinite;
+}
+
+.oval-border.success {
+    border-color: var(--success-color);
+    box-shadow: 0 0 30px rgba(76, 175, 80, 0.6);
+    animation: success 0.5s ease-out;
+}
+
+.oval-border.error {
+    border-color: var(--error-color);
+    box-shadow: 0 0 20px rgba(244, 67, 54, 0.5);
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Status message states */
+#status.error {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.95) 0%, rgba(229, 57, 53, 0.95) 100%);
+    box-shadow: 0 8px 32px rgba(244, 67, 54, 0.3);
+}
+
+#status.analyzing {
+    background: linear-gradient(135deg, rgba(33, 150, 243, 0.95) 0%, rgba(30, 136, 229, 0.95) 100%);
+    box-shadow: 0 8px 32px rgba(33, 150, 243, 0.3);
+}
+
+#status.success {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.95) 0%, rgba(67, 160, 71, 0.95) 100%);
+    box-shadow: 0 8px 32px rgba(76, 175, 80, 0.3);
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.02); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes scanning {
+    0% { 
+        background: linear-gradient(transparent 0%, rgba(33, 150, 243, 0.1) 50%, transparent 100%);
+        background-size: 100% 200%;
+        background-position: 0 0;
+    }
+    100% { 
+        background: linear-gradient(transparent 0%, rgba(33, 150, 243, 0.1) 50%, transparent 100%);
+        background-size: 100% 200%;
+        background-position: 0 -200%;
+    }
+}
+
+@keyframes success {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Loading indicator */
+.loading-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--primary-color);
+    animation: spin 1s linear infinite;
+    display: none;
+}
+
+.loading .loading-indicator {
+    display: block;
+}
+
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Timeout overlay */
+.timeout-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.timeout-overlay.active {
+    display: flex;
+}
+
+.timeout-content {
+    background-color: rgba(28, 28, 30, 0.95);
+    color: var(--text-color);
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 90%;
+    width: 400px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: var(--shadow-strong);
+}
+
+/* Progress Overlay Styles */
+.progress-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.progress-content {
+    background-color: rgba(28, 28, 30, 0.95);
+    color: var(--text-color);
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: var(--shadow-strong);
+}
+
+.progress-content div {
+    margin-bottom: 1rem;
+}
+
+/* Progress Dots */
+.progress-dots {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 0;
+    list-style: none;
+    z-index: 100;
+}
+
+.progress-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    display: block;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.progress-dot::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    transition: all 0.3s ease-in-out;
+}
+
+.progress-dot.active {
+    background-color: var(--primary-color);
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+}
+
+.progress-dot.active::after {
+    border-color: rgba(33, 150, 243, 0.3);
+    animation: pulse-border 1.5s infinite;
+}
+
+@keyframes pulse-border {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.progress-text {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+/* Success Overlay Styles */
+.success-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.success-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.success-content {
+    background: rgba(28, 28, 30, 0.95);
+    color: var(--text-color);
+    padding: 2.5rem;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 90%;
+    width: 400px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: var(--shadow-strong);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.success-overlay.active .success-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.success-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: var(--success-color);
+}
+
+.success-content p {
+    margin: 15px 0;
+    font-size: 1.2rem;
+    line-height: 1.4;
+}
+
+.success-content .frames-info {
+    margin-top: 15px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+.success-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--success-color);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: white;
+    transform: scale(0.5);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.success-icon.animate {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.action-button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.action-button:hover {
+    background: #1976D2;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+}
+
+.action-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(33, 150, 243, 0.2);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .oval-border {
+        width: min(75vw, 300px);
+        height: min(65vh, 380px);
+    }
+
+    #status {
+        font-size: 1rem;
+        padding: 12px 24px;
+    }
+
+    #statusHint {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .oval-border {
+        width: min(85vw, 280px);
+        height: min(55vh, 360px);
+    }
+
+    #status-container {
+        width: 90%;
+        bottom: max(8vh, 60px);
+    }
+}
+
+/* iOS specific fixes */
+@supports (-webkit-touch-callout: none) {
+    .container,
+    #video-container {
+        height: -webkit-fill-available;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .oval-border,
+    #status,
+    .loading-indicator {
+        transition: none !important;
+        animation: none !important;
+    }
+} 

@@ -1,46 +1,51 @@
-# Face Detection and Recognition System
+# Veronica Face Authentication System
 
-![Face Detection and Recognition System](assets/image-1.png)
-A robust face detection, recognition, and anti-spoofing system with real-time authentication capabilities.
+A production-ready face authentication system built with Python, featuring real-time face detection, liveness detection, and face recognition capabilities.
 
 ## Features
 
-- Real-time face detection and recognition
-- Advanced anti-spoofing measures:
-  - Depth estimation using iris analysis
-  - Motion parallax detection
-  - Lens distortion analysis
-  - Focus quality check
-  - Natural movement verification
-- User-friendly GUI interface with camera controls
-- Fast 3-second authentication
-- Multi-angle face registration for better accuracy
-- Database integration for face storage
-- Camera controls for exposure and gain
-- Performance optimization and statistics
+- Real-time face detection and tracking
+- Iris-based depth estimation
+- Deep learning-based liveness detection
+- Anti-spoofing protection
+- Face recognition with high accuracy
+- Secure session management and token validation
+- Rate limiting and DDoS protection
+- Cross-platform support (Windows, Linux, macOS)
+- Modern web interface with responsive design
+- Production-ready configuration
+- Comprehensive logging and monitoring
+- GPU acceleration support
+
+## Tech Stack
+
+- **Frontend**: JavaScript, WebRTC
+- **Backend**: Python, FastAPI
+- **ML/CV**: MediaPipe, InsightFace, OpenCV
+- **Database**: SQL Server
+- **Security**: JWT, CSRF Protection
 
 ## Prerequisites
 
-- Python 3.10 or higher
-- SQL Server with ODBC Driver 18
+- Python 3.8+
 - CUDA-capable GPU (recommended)
-- Webcam with manual exposure control
-- Required Python packages (see requirements.txt)
+- SQL Server
+- Required models (downloaded automatically)
 
 ## Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/Basel-anaya/Veronica.git
-cd Veronica
+git clone https://github.com/Basel-anaya/veronica.git
+cd veronica
 ```
 
-2. Create a virtual environment:
+2. Create and activate virtual environment:
 ```bash
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 # or
-.\venv\Scripts\activate  # Windows
+venv\Scripts\activate  # Windows
 ```
 
 3. Install dependencies:
@@ -48,101 +53,102 @@ source venv/bin/activate  # Linux/Mac
 pip install -r requirements.txt
 ```
 
-4. Download required models:
-   - Create a `models` directory in the project root
-   - Download the InsightFace model:
-     ```bash
-     mkdir -p models/buffalo_l
-     wget https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip
-     unzip buffalo_l.zip -d models/buffalo_l/
-     ```
-   - Download the face landmarks model:
-     ```bash
-     wget http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
-     bzip2 -d shape_predictor_68_face_landmarks.dat.bz2
-     ```
+4. Configure environment variables:
+```bash
+cp config/.env.example config/.env
+# Edit config/.env with your settings
+```
 
-5. Configure database connection:
-- Update the connection string in `main.py` and `delete_duplicates.py`
-- Ensure SQL Server is accessible and ODBC Driver 18 is installed
+5. Initialize the database:
+```bash
+python scripts/init_db.py
+```
+
+6. Start the server:
+```bash
+python -m veronica.api.routes
+```
 
 ## Usage
 
-The system offers three main modes:
+1. Access the web interface at `http://localhost:5000`
+2. Position your face within the oval guide
+3. Follow the on-screen instructions
+4. Wait for authentication result
 
-1. Face Registration Mode (`python main.py` - Option 1)
-   - Register new faces from ID card images
-   - Place ID card images in the `ID-samples` folder with format: `name-ID.jpg`
-   - Supports multiple angle registration for better recognition
+## Development
 
-2. Face Detection Mode (`python main.py` - Option 2)
-   - Real-time face detection and recognition
-   - Anti-spoofing checks with confidence scores
-   - Camera exposure and gain controls
-   - Performance statistics display
+### Project Structure
+```
+veronica/
+├── config/
+│   ├── .env
+│   └── gunicorn_conf.py
+├── docs/
+│   ├── README.md
+│   └── ARCHITECTURE.md
+├── src/
+│   └── veronica/
+│       ├── api/
+│       │   └── routes.py
+│       └── core/
+│           └── face_system.py
+├── static/
+│   ├── css/
+│   │   └── styles.css
+│   └── js/
+│       └── app.js
+├── templates/
+│   └── index.html
+├── tests/
+│   └── ...
+├── .gitignore
+├── LICENSE
+├── README.md
+└── requirements.txt
+```
 
-3. Sample Face Addition (`python add_faces.py`)
-   - Add sample faces to the database
-   - Place face images in the `faces` directory
+### Running Tests
+```bash
+pytest tests/
+```
 
-Additional Utilities:
-- `delete_duplicates.py`: Clean up duplicate face entries in the database
+### Code Style
+```bash
+black src/
+flake8 src/
+```
 
-## System Components
+## Security
 
-1. Face Recognition
-   - InsightFace-based face embedding extraction
-   - Cosine similarity matching
-   - Temporal smoothing for stability
+- HTTPS required in production
+- Session-based authentication
+- CSRF protection
+- Rate limiting
+- Input validation
+- Secure token management
 
-2. Anti-Spoofing
-   - Iris-based depth estimation
-   - Motion analysis with regional weights
-   - Lens distortion patterns
-   - Focus quality assessment
-   - Natural micro-movement detection
+## Performance
 
-3. Camera Controls
-   - Manual exposure adjustment
-   - Gain control
-   - Buffer size optimization
-   - Frame rate management
+- Frame skipping for performance
+- GPU acceleration
+- Caching mechanisms
+- Resource cleanup
+- Memory management
 
-## Performance Optimization
+## Contributing
 
-- Adaptive frame processing
-- Multi-threaded operation
-- Batch processing for database operations
-- Caching mechanisms for face embeddings
-- Resolution scaling based on distance
-
-## Troubleshooting
-
-Common issues and solutions:
-
-1. Database Connection:
-   - Verify SQL Server is running
-   - Check credentials in connection string
-   - Ensure ODBC Driver 18 is installed
-
-2. Camera Issues:
-   - Check camera permissions
-   - Adjust exposure/gain settings
-   - Verify camera index
-   - Ensure proper USB connection
-
-3. Performance Issues:
-   - Verify CUDA installation
-   - Update GPU drivers
-   - Adjust input resolution
-   - Check system resources
-
-4. Recognition Issues:
-   - Ensure proper lighting
-   - Maintain optimal distance (35-75cm)
-   - Check face angle
-   - Verify database entries
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
 
-[MIT](LICENSE)
+© Barzan DIG. All Rights Reserved.
+Proprietary and Confidential.
+
+## Author
+
+Basel Anaya

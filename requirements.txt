@@ -1,29 +1,49 @@
 # Core dependencies
-numpy
-opencv-python
-dlib
-mediapipe
-insightface
-fastapi
-uvicorn
-python-dotenv
-pyodbc
-scipy
+numpy==1.26.2
+opencv-python==4.8.1.78
+dlib==19.24.2
+mediapipe==0.10.8
+insightface==0.7.3
+fastapi==0.104.1
+uvicorn==0.24.0
+python-dotenv==1.0.0
+pyodbc==5.0.1
+scipy==1.11.4
 Pillow
-aiofiles
-jinja2
-
-# GUI dependencies
-tk
+aiofiles==23.2.1
+jinja2==3.1.2
 
 # CUDA support (optional but recommended)
 torch
 torchvision
 
 # Web dependencies
-python-multipart
+python-multipart==0.0.6
 starlette
 
 # Development dependencies
-python-jose
-passlib
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+
+# Production dependencies
+gunicorn==21.2.0
+pydantic==2.5.2
+onnxruntime-gpu==1.16.3
+
+# Additional dependencies
+cryptography
+typing-extensions
+websockets
+requests
+loguru
+
+# Testing dependencies
+pytest==7.4.3
+black==23.11.0
+flake8==6.1.0
+pytest-cov==4.1.0
+pytest-asyncio==0.21.1
+httpx==0.25.2
+
+# Additional dependencies
+scikit-image==0.22.0

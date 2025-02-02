@@ -22,8 +22,8 @@ wheels/
 
 # Virtual Environment
 venv/
-ENV/
 env/
+ENV/
 
 # IDE
 .idea/
@@ -31,24 +31,23 @@ env/
 *.swp
 *.swo
 
-# Database
+# Logs
+logs/
+*.log
+
+# Local development
+.env
+.env.local
 *.db
 *.sqlite3
 
-# Environment variables
-.env
-
-# Logs
-*.log
-
-# Face samples and models
-faces/
-ID-samples/
-*.dat
-*.task
-models/
+# Model files
 *.onnx
-*.zip
+*.task
+*.dat
+*.weights
+*.pt
+*.pth
 
 # Media files
 *.jpg
@@ -57,7 +56,66 @@ models/
 *.gif
 *.mp4
 *.avi
+*.mov
 
-# Except README assets
-!assets/*.png
-!assets/*.jpg 
+# Security
+*.key
+*.pem
+*.crt
+*.csr
+secret.key
+csrf.key
+
+# Cache
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Distribution
+dist/
+build/
+*.spec
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.tox/
+
+# Documentation
+docs/_build/
+
+# Production
+*.pid
+*.sock
+
+# Distribution / packaging
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg 
